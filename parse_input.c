@@ -16,10 +16,11 @@ int parse_input(char *input, char **args)
 		return (0);
 
 	args[0] = token;
-	i = 1;
 
+	i = 1;
 	while ((token = strtok(NULL, " \n")))
 		args[i++] = token;
+
 	args[i] = NULL;
 
 	return (1);
