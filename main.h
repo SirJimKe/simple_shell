@@ -13,8 +13,8 @@ int _putchar(char c);
 void print_prompt();
 int parse_input(char *input, char **args);
 int check_executable(char* executable);
-void execute_command(char **args, char *envp[]);
-void fork_process(void);
-void run_shell(void);
+void execute_command(char **argv, char **envp);
+void fork_process(char **args, char **envp);
+void run_shell(char **argv __attribute__((unused)), char **envp);
 
 #endif
