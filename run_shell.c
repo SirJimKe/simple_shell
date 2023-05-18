@@ -14,7 +14,9 @@ void run_shell(char **argv __attribute__((unused)), char **envp)
 
 	while (1)
 	{
-		print_prompt();
+		if (isatty(STDIN_FILENO))
+			print_prompt();
+
 		bytes_read = getline(&input, &input_len, stdin);
 		if (bytes_read == -1)
 		{
@@ -26,14 +28,12 @@ void run_shell(char **argv __attribute__((unused)), char **envp)
 			input[bytes_read - 1] = '\0';
 
 		args[0] = input;
-		/**
-		 *
-		 * if (!parse_input(input, args))
-		 *	continue;
 
-		 * if (!check_executable(args[0]))
-		 *	continue;
-		 */
+		if (!parse_input(input, args))
+			continue;
+
+		if (!check_executable(args[0]))
+			continue;
 
 		fork_process(args, envp);
 	}
