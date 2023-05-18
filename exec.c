@@ -17,12 +17,12 @@ int check_executable(char *executable)
 
 /**
  * execute_command - executes a command with the given arguments
- * @args: douber pointer to character args (command and its arguments)
+ * @argv: douber pointer to character args (command and its arguments)
  * @envp: an array of strings representing the environment variables
  */
-void execute_command(char **args, char *envp[])
+void execute_command(char **argv, char **envp)
 {
-	if (execve(args[0], args, envp) == -1)
+	if (execve(argv[0], argv, envp) == -1)
 	{
 		perror("execve");
 		exit(1);

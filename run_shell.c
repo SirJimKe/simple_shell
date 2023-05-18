@@ -1,16 +1,16 @@
 #include "main.h"
 
-#define MAX_INPUT_LENGTH 1024
-
 /**
  * run_shell - runs the simple shell program
+ * @argv: double pointer to character args (command and its arguments)
+ * @envp: an array of strings representing the environment variables
  */
-void run_shell(void)
+void run_shell(char **argv __attribute__((unused)), char **envp)
 {
 	char *input = NULL;
 	size_t input_len = 0;
 	ssize_t bytes_read;
-	char *args[MAX_INPUT_LENGTH];
+	char *args[] = {NULL, NULL};
 
 	while (1)
 	{
@@ -18,18 +18,24 @@ void run_shell(void)
 		bytes_read = getline(&input, &input_len, stdin);
 		if (bytes_read == -1)
 		{
-			_putchar('\n');
 			free(input);
 			exit(0);
 		}
 
-		if (!parse_input(input, args))
-			continue;
+		if (input[bytes_read - 1] == '\n')
+			input[bytes_read - 1] = '\0';
 
-		if (!check_executable(args[0]))
-			continue;
+		args[0] = input;
+		/**
+		 *
+		 * if (!parse_input(input, args))
+		 *	continue;
 
-		fork_process();
+		 * if (!check_executable(args[0]))
+		 *	continue;
+		 */
+
+		fork_process(args, envp);
 	}
 
 	free(input);

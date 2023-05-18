@@ -7,8 +7,9 @@
  * @envp: holds the environment variables
  * Return: 0
  */
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
-	run_shell();
+	if (argc == 1)
+		run_shell(argv, envp);
 	return (0);
 }
