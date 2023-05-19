@@ -5,7 +5,7 @@
  */
 void print_prompt(void)
 {
-	char prompt[] = "($)";
+	char prompt[] = "($) ";
 	int i = 0;
 
 	while (prompt[i] != '\0')

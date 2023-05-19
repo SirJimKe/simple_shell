@@ -8,19 +8,19 @@
 void fork_process(char **args, char **envp)
 {
 	int status;
-	pid_t pid;
+	pid_t child_pid;
 
-	pid = fork();
-	if (pid < 0)
+	child_pid = fork();
+	if (child_pid < 0)
 	{
 		perror("fork");
 		exit(1);
 	}
-	else if (pid == 0)
+	else if (child_pid == 0)
 	{
 		execute_command(args, envp);
 		exit(0);
 	}
 	else
-		waitpid(pid, &status, 0);
+		waitpid(child_pid, &status, 0);
 }
