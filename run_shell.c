@@ -11,6 +11,7 @@ void run_shell(char **argv __attribute__((unused)), char **envp)
 	size_t input_len = 0;
 	ssize_t bytes_read;
 	char *args[] = {NULL, NULL};
+	char* command_path;
 
 	while (1)
 	{
@@ -32,10 +33,16 @@ void run_shell(char **argv __attribute__((unused)), char **envp)
 		if (!parse_input(input, args))
 			continue;
 
+		command_path = findCommandDirectory(args[0]);
+
+		if (command_path != NULL)
+			args[0] = command_path;
+
 		if (!check_executable(args[0]))
 			continue;
 
 		fork_process(args, envp);
+		free(command_path);
 	}
 
 	free(input);

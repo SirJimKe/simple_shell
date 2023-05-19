@@ -28,3 +28,53 @@ void execute_command(char **argv, char **envp)
 		exit(1);
 	}
 }
+
+/**
+ * findCommandDirectory - checks if a command exists
+ * @command: the command name
+ * Return: directory or NULL
+ */
+char *findCommandDirectory(const char *command)
+{
+	char *path_env = _getenv("PATH");
+	char *path_copy;
+	char *path_dir;
+	char *full_path;
+
+	if (path_env == NULL)
+	{
+		perror("path");
+		return NULL;
+	}
+
+	path_copy = _strdup(path_env);
+	path_dir = strtok(path_copy, ":");
+	while (path_dir != NULL)
+	{
+		size_t path_dir_len = _strlen(path_dir);
+		size_t command_len = _strlen(command);
+		full_path = (char *)malloc(path_dir_len + command_len + 2);
+		if (full_path == NULL)
+		{
+			perror("malloc");
+			free(path_copy);
+			return NULL;
+		}
+
+		_strcpy(full_path, path_dir);
+		_strcat(full_path, "/");
+		_strcat(full_path, command);
+
+		if (access(full_path, F_OK) == 0)
+		{
+			free(path_copy);
+			return full_path;
+		}
+
+		free(full_path);
+		path_dir = strtok(NULL, ":");
+	}
+
+	free(path_copy);
+	return NULL;
+}
