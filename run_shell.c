@@ -1,6 +1,61 @@
 #include "main.h"
 
 /**
+ * read_input - reads input from stdin
+ * @input: pointer to input string
+ * @input_len: pointer to input length
+ *
+ * Return: number of bytes read
+ */
+ssize_t read_input(char **input, size_t *input_len)
+{
+	ssize_t bytes_read;
+
+	bytes_read = getline(input, input_len, stdin);
+	if (bytes_read == -1)
+	{
+		free(*input);
+		exit(0);
+	}
+
+	if ((*input)[bytes_read - 1] == '\n')
+		(*input)[bytes_read - 1] = '\0';
+
+	return (bytes_read);
+}
+
+/**
+ * handle_input - handles the parsed input
+ * @input: input string
+ * @args: array of command and arguments
+ * @envp: array of environment variables
+ */
+void handle_input(char *input, char **args, char **envp)
+{
+	char *command_path;
+
+	if (_strncmp(args[0], "exit", _strlen("exit")) == 0)
+	{
+		free(input);
+		exit(0);
+	}
+
+	if (!parse_input(input, args))
+		return;
+
+	command_path = find_command_directory(args[0]);
+
+	if (command_path != NULL)
+		args[0] = command_path;
+
+	if (!check_executable(args[0]))
+		return;
+
+	fork_process(args, envp);
+	free(command_path);
+}
+
+/**
  * run_shell - runs the simple shell program
  * @argv: double pointer to character args (command and its arguments)
  * @envp: an array of strings representing the environment variables
@@ -9,40 +64,18 @@ void run_shell(char **argv __attribute__((unused)), char **envp)
 {
 	char *input = NULL;
 	size_t input_len = 0;
-	ssize_t bytes_read;
 	char *args[] = {NULL, NULL};
-	char* command_path;
 
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			print_prompt();
 
-		bytes_read = getline(&input, &input_len, stdin);
-		if (bytes_read == -1)
-		{
-			free(input);
-			exit(0);
-		}
-
-		if (input[bytes_read - 1] == '\n')
-			input[bytes_read - 1] = '\0';
+		read_input(&input, &input_len);
 
 		args[0] = input;
 
-		if (!parse_input(input, args))
-			continue;
-
-		command_path = findCommandDirectory(args[0]);
-
-		if (command_path != NULL)
-			args[0] = command_path;
-
-		if (!check_executable(args[0]))
-			continue;
-
-		fork_process(args, envp);
-		free(command_path);
+		handle_input(input, args, envp);
 	}
 
 	free(input);
