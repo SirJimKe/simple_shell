@@ -33,11 +33,21 @@ ssize_t read_input(char **input, size_t *input_len)
 void handle_input(char *input, char **args, char **envp)
 {
 	char *command_path;
+	char **env = environ;
 
 	if (_strncmp(args[0], "exit", _strlen("exit")) == 0)
 	{
 		free(input);
 		exit(0);
+	}
+
+	if (_strncmp(args[0], "env", _strlen("env")) == 0)
+	{
+		while (*env != NULL)
+		{
+			_puts(*env);
+			env++;
+		}
 	}
 
 	if (!parse_input(input, args))

@@ -13,7 +13,10 @@
 
 extern char **environ;
 
+/* puts.c */
 int _putchar(char c);
+void _puts(const char *str);
+
 void print_prompt(void);
 int parse_input(char *input, char **args);
 
