@@ -54,6 +54,7 @@ char *_strdup(const char *str);
 
 /* _getenv.c file */
 char *_getenv(const char *name);
+ssize_t _getline(char **input, size_t *size, FILE *stream)
 <<<<<<< HEAD
 =======
 
