@@ -34,13 +34,19 @@ void handle_input(char *input, char **args, char **envp)
 {
 	char *command_path;
 	char **env = environ;
+	int status = 0;
+
+	if (!parse_input(input, args))
+		return;
 
 	if (_strncmp(args[0], "exit", _strlen("exit")) == 0)
 	{
-		free(input);
-		exit(0);
-	}
 
+		if (args[1] != NULL)
+			status = atoi(args[1]);
+		free(input);
+		exit(status);
+	}
 	if (_strncmp(args[0], "env", _strlen("env")) == 0)
 	{
 		while (*env != NULL)
@@ -49,9 +55,6 @@ void handle_input(char *input, char **args, char **envp)
 			env++;
 		}
 	}
-
-	if (!parse_input(input, args))
-		return;
 
 	command_path = find_command_directory(args[0]);
 
