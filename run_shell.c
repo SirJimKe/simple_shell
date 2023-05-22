@@ -11,7 +11,7 @@ ssize_t read_input(char **input, size_t *input_len)
 {
 	ssize_t bytes_read;
 
-	bytes_read = getline(input, input_len, stdin);
+	bytes_read = _getline(input, input_len, stdin);
 	if (bytes_read == -1)
 	{
 		free(*input);

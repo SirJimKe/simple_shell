@@ -1,55 +1,49 @@
 #include "main.h"
 
 /**
- * _getline - A custom getline function
- * @input: Input command and arguments
- * @size: Buffer size allocated to input
- * @stream: The STDIN
- * Return: Number of characters passed to STDIN
+ * _getline - reads characters from the specified stream
+ * @lineptr: A pointer to a pointer to a character
+ * @n: pointer to a size_t variable
+ * @stream: the STDIN
+ * Return:  the number of characters read
  */
-
-ssize_t _getline(char **input, size_t *size, FILE *stream)
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 {
-	char ch;
-	size_t len = 0;
-	size_t buf_size = *size;
-	char *line = *input;
+	int c;
+	size_t i = 0;
+	char *temp;
 
-	if (input == NULL || size == NULL || stream == NULL)
-	{
+	if (lineptr == NULL || n == NULL || stream == NULL)
 		return (-1);
-	}
 
-	while ((ch = fgetc(stream)) != '\n')
+	if (*lineptr == NULL || *n == 0)
 	{
-		if (len >= buf_size - 1)
-		{
-			buf_size *= 2;
-			char *new_line = realloc(line, buf_size);
+		*lineptr = malloc(INITIAL_BUFFER_SIZE);
+		if (*lineptr == NULL)
+			return (-1);
+		*n = INITIAL_BUFFER_SIZE;
+	}
+	while ((c = fgetc(stream)) != EOF)
+	{
+		(*lineptr)[i++] = (char)c;
 
-			if (new_line == NULL)
+		if (i >= *n - 1)
+		{
+			*n *= 2;
+			temp = realloc(*lineptr, *n);
+			if (temp == NULL)
 			{
+				free(*lineptr);
 				return (-1);
 			}
-			line = new_line;
+			*lineptr = temp;
 		}
-		line[len] = ch;
-		len++;
 
-		if (ch == '\n')
-		{
+		if (c == '\n')
 			break;
-		}
 	}
 
-	if (len == 0)
-	{
-		return (-1);
-	}
+	(*lineptr)[i] = '\0';
 
-	line[len] = '\0';
-	*input = line;
-	*size = buf_size;
-
-	return (len);
+	return ((ssize_t)i);
 }

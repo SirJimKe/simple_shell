@@ -45,7 +45,7 @@ char *find_command_directory(const char *command)
 	}
 
 	path_copy = _strdup(path_env);
-	path_dir = strtok(path_copy, ":");
+	path_dir = _strtok(path_copy, ":");
 
 	while (path_dir != NULL)
 	{
@@ -71,7 +71,7 @@ char *find_command_directory(const char *command)
 		}
 
 		free(full_path);
-		path_dir = strtok(NULL, ":");
+		path_dir = _strtok(NULL, ":");
 	}
 
 	free(path_copy);

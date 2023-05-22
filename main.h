@@ -10,10 +10,12 @@
 #include <errno.h>
 
 #define MAX_COMMAND_LENGTH 256
+#define BUFFER_SIZE 1024
+#define INITIAL_BUFFER_SIZE 64
 
 extern char **environ;
 
-/* puts.c */
+/* puts.c file */
 int _putchar(char c);
 void _puts(const char *str);
 
@@ -44,5 +46,10 @@ char *_strdup(const char *str);
 char *_getenv(const char *name);
 
 
+/* _strtok.c file */
+char *_strtok(char *str, const char *delim);
+
+/* _getline.c file */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif
