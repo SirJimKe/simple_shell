@@ -37,6 +37,4 @@ char *_strdup(const char *str);
 /* _getenv.c file */
 char *_getenv(const char *name);
 
-
-
 #endif
