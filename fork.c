@@ -14,12 +14,12 @@ void fork_process(char **args, char **envp)
 	if (child_pid < 0)
 	{
 		perror("fork");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	else if (child_pid == 0)
 	{
 		execute_command(args, envp);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	else
 		waitpid(child_pid, &status, 0);

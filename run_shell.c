@@ -7,21 +7,25 @@
  *
  * Return: number of bytes read
  */
-ssize_t read_input(char **input, size_t *input_len)
-{
+ssize_t read_input(char **input, size_t *input_len) {
 	ssize_t bytes_read;
 
-	bytes_read = _getline(input, input_len, stdin);
-	if (bytes_read == -1)
-	{
-		free(*input);
-		exit(0);
+	bytes_read = getline(input, input_len, stdin);
+	if (bytes_read == -1) {
+		if (feof(stdin)) {
+			free(*input);
+			exit(EXIT_SUCCESS);
+		} else {
+			perror("getline");
+			exit(EXIT_FAILURE);
+		}
 	}
 
-	if ((*input)[bytes_read - 1] == '\n')
+	if ((*input)[bytes_read - 1] == '\n') {
 		(*input)[bytes_read - 1] = '\0';
+	}
 
-	return (bytes_read);
+	return bytes_read;
 }
 
 /**

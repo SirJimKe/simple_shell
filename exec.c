@@ -25,7 +25,7 @@ void execute_command(char **argv, char **envp)
 	if (execve(argv[0], argv, envp) == -1)
 	{
 		perror("execve");
-		exit(1);
+		exit(EXIT_SUCCESS);
 	}
 }
 
